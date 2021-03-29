@@ -11,6 +11,7 @@ public:
 
 signals:
 
+
 };
 
 #endif // INPUTMETHODONE_H

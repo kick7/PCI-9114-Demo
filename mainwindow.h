@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <conio.h>
+#include <windows.h>
+#include "Dask.h"
+#include <QMap>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,7 +19,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_groupBox_1_config_pushButton_ok_clicked();
+
+    void on_groupBox_1_config_pushButton_clear_clicked();
+
+    void on_groupBox_1_pushButton_start_clicked();
+
 private:
     Ui::MainWindow *ui;
+    I16 cardType,cardNum;
+    QMap<QString,int> cardTypeData;
 };
 #endif // MAINWINDOW_H
