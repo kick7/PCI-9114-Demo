@@ -17,8 +17,8 @@
    <widget class="QGroupBox" name="groupBox_1">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>60</y>
+      <x>140</x>
+      <y>50</y>
       <width>526</width>
       <height>267</height>
      </rect>

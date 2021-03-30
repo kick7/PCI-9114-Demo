@@ -37,7 +37,7 @@ void InputMethodOne::init()
 
 void InputMethodOne::m_read()
 {
-
+    
 }
 
 void InputMethodOne::m_config()
