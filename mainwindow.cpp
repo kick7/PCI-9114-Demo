@@ -15,8 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    disconnect(inputMethodOneThread,&QThread::started,inputMethodOne,&InputMethodOne::init);
+    disconnect(inputMethodOneThread,&QThread::finished,inputMethodOne,&InputMethodOne::deleteLater);
     if(inputMethodOne){
-        inputMethodOne->isRunning=false;
         delete inputMethodOne;
         inputMethodOne = NULL;
     }
@@ -46,7 +47,8 @@ void MainWindow::on_groupBox_1_config_pushButton_ok_clicked()
     }
     cardNum = ui->groupBox_1_config_cardNum->text().toInt();
     U16 channel = buttonGroup->checkedId();
-    qDebug()<<cardType<<":"<<cardNum<<":"<<channel;
+    QString info = QString("当前的板卡类型为：%1，板卡号为：%2，选择通道为：%3").arg(ui->groupBox_1_config_cardType->currentText()).arg(cardNum).arg(channel);
+    QMessageBox::information(this,tr("提示"),info);
     init_1_thread(cardType,cardNum,channel);
 }
 
@@ -60,7 +62,7 @@ void MainWindow::on_groupBox_1_config_pushButton_clear_clicked()
  */
 void MainWindow::on_groupBox_1_pushButton_start_clicked()
 {
-    inputMethodOneThread->start();
+    emit signal_method_one_start();
 }
 
 void MainWindow::init_1()
@@ -104,6 +106,9 @@ void MainWindow::init_1()
     buttonGroup->addButton(ui->groupBox_1_listen_radioButton_com30,29);
     buttonGroup->addButton(ui->groupBox_1_listen_radioButton_com31,30);
     buttonGroup->addButton(ui->groupBox_1_listen_radioButton_com32,31);
+    ui->groupBox_1_output_label->clear();
+    ui->groupBox_1_time->clear();
+    ui->groupBox_1_time_data->clear();
 }
 
 /**
@@ -114,8 +119,8 @@ void MainWindow::init_1()
  */
 void MainWindow::init_1_thread(I16 cardType, I16 cardNum, U16 channel)
 {
-    inputMethodOne = new InputMethodOne(cardType,cardNum,channel,this);
-    inputMethodOneThread = new QThread(this);
+    inputMethodOne = new InputMethodOne(cardType,cardNum,channel);
+    inputMethodOneThread = new QThread;
     inputMethodOne->moveToThread(inputMethodOneThread);
     //线程初始化
     connect(inputMethodOneThread,&QThread::started,inputMethodOne,&InputMethodOne::init);
@@ -124,12 +129,14 @@ void MainWindow::init_1_thread(I16 cardType, I16 cardNum, U16 channel)
     connect(this,&MainWindow::signal_method_one_start,inputMethodOne,&InputMethodOne::slot_start);
     connect(this,&MainWindow::signal_method_one_stop,inputMethodOne,&InputMethodOne::slot_stop);
     connect(inputMethodOne,&InputMethodOne::signal_result,this,&MainWindow::slot_method_one_error);
+    connect(inputMethodOne,&InputMethodOne::signal_current_count,this,&MainWindow::slot_method_one_current_count);
+    connect(inputMethodOne,&InputMethodOne::signal_time_different,this,&MainWindow::slot_method_one_time_different);
+    inputMethodOneThread->start();
 }
 
 void MainWindow::on_groupBox_1_pushButton_stop_clicked()
 {
-    inputMethodOneThread->quit();
-    inputMethodOneThread->wait();
+    emit signal_method_one_stop();
 }
 
 void MainWindow::slot_method_one_error(bool flag, QString message)
@@ -138,5 +145,19 @@ void MainWindow::slot_method_one_error(bool flag, QString message)
         QMessageBox::warning(this,tr("警告"),message);
     }else{
         QMessageBox::information(this,tr("提示"),message);
+    }
+}
+
+void MainWindow::slot_method_one_current_count(unsigned long count)
+{
+    ui->groupBox_1_output_label->setText(QString::number(count));
+}
+
+void MainWindow::slot_method_one_time_different(int type,long time)
+{
+    if(type == 1){
+        ui->groupBox_1_time_data->setText(QString::number(time));
+    }else{
+        ui->groupBox_1_time->setText(QString::number(time));
     }
 }

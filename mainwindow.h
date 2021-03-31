@@ -32,6 +32,10 @@ private slots:
 
     void slot_method_one_error(bool flag,QString message);
 
+    void slot_method_one_current_count(unsigned long count);
+
+    void slot_method_one_time_different(int type,long time);
+
 private:
     void init_1();
     void init_1_thread(I16 cardType,I16 cardNum,U16 channel);

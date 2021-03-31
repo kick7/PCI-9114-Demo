@@ -18,12 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     inputmethodone.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    threadoneread.cpp
 
 HEADERS += \
     Dask.h \
     inputmethodone.h \
-    mainwindow.h
+    mainwindow.h \
+    threadoneread.h
 
 FORMS += \
     mainwindow.ui
