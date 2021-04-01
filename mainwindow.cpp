@@ -161,3 +161,9 @@ void MainWindow::slot_method_one_time_different(int type,long time)
         ui->groupBox_1_time->setText(QString::number(time));
     }
 }
+
+void MainWindow::on_groupBox_2__pushButton_start_clicked()
+{
+    QString taskName = ui->groupBox_2_lineEdit->text();
+
+}

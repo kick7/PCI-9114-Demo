@@ -36,6 +36,8 @@ private slots:
 
     void slot_method_one_time_different(int type,long time);
 
+    void on_groupBox_2__pushButton_start_clicked();
+
 private:
     void init_1();
     void init_1_thread(I16 cardType,I16 cardNum,U16 channel);

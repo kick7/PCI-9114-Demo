@@ -17,13 +17,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     inputmethodone.cpp \
+    inputmethodtwo.cpp \
     main.cpp \
     mainwindow.cpp \
     threadoneread.cpp
 
 HEADERS += \
+    DAQPilot.h \
     Dask.h \
     inputmethodone.h \
+    inputmethodtwo.h \
     mainwindow.h \
     threadoneread.h
 
